@@ -141,7 +141,8 @@ CV      L=5
 9988  FORMAT(/' DONALD ECCLESTONE (C)1979 AND DAN GAHLINGER (C)1993
      * PRESENT'//' T H E   H O L Y   T E R R O R   -
      *   T R E K 7'///)
-      WRITE(5,*)' TYPE IN A RANDOM NUMBER BETWEEN 1-32767'
+      WRITE(5,100)
+100   FORMAT(' TYPE IN A RANDOM NUMBER BETWEEN 1-32767')
       READ(5,*)ITOM
 
 C***** ABOVE WRITE WAS ORIGINALLY 1-99999 *****
@@ -1185,37 +1186,17 @@ CV IY = LOWER LIMIT (INCLUSIVE)
 CV IZ = UPPER LIMIT (INCLUSIVE)
 CV ITOM = SEED
 
-      SUBROUTINE RANDO(IX,IY,IZ)
-      COMMON /TOM/ITOM
-      INTEGER*2 ISHRT,ISHIT
-      REAL RT
-
-CV FLAG "REPRO" - TRUE = REPRODUCABLE GAME PROGRESS
-      LOGICAL REPRO
-      REAL SECS
-      INTEGER ISECS
-      REPRO=.FALSE.
-
-CV IF REPRO = .TRUE.: SKIP UPDATING ITOM
-      IF(REPRO)GO TO 9
-
-CV CALCULATE 1/100TH SECS SINCE MIDNIGHT
-      SECS=SECNDS(0.0)*100.0
-      ISECS=INT(SECS)
-
-CV CALCULATE IMPROVED ITOM
-      ITOM=INT(MOD((ITOM+ISECS),32767))
-
-9     CONTINUE
-
-      ISHRT=ITOM                                                             *
-      ISHIT=ITOM                                                             *
-
-      RT=RAN(ISHRT,ISHIT)
-      ITOM=IFIX(RT*10000.)
+      SUBROUTINE RANDO(I,J,K)
+        COMMON /TOM/ITOM
+        INTEGER*2 ISHRT,ISHIT
+        REAL RT
+        ISHRT=ITOM
+        ISHIT=ITOM
+C this is a kludge to make the VMS random num. gen. to work.
+        RT=RAN(ISHRT,ISHIT)
+        ITOM=IFIX(RT*10000.)
 4     TEMP=FLOAT(MOD(ITOM,100))/100.
-      IX=(IZ-IY+1)*TEMP+IY
-
+        I=(K-J+1)*TEMP+J
       RETURN
       END
 
