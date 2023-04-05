@@ -1,13 +1,10 @@
 C=======================================================================
 C                                                                      *
-C                              DONALD ECCLESTONE                       *
-C                                     AND                              *
-C                                DAN GAHLINGER                         *
-C                                   PRESENT                            *
+C                         DONALD ECCLESTONE PRESENTS                   *
 C                                      -                               *
 C                        T H E   H O L Y   T E R R O R                 *
 C                                                                      *
-C                       TTTTT RRRR  EEEEE K   K 777777                 *
+C                       TTTTT RRRR  EEEEE K   K 77777                  *
 C                         T   R   R E     K  K      7                  *
 C                         T   RRRR  EEEE  KKK      7                   *
 C                         T   R  R  E     K  K    7                    *
@@ -15,13 +12,8 @@ C                         T   R   R EEEEE K   K  7                     *
 C                                                                      *
 C=======================================================================
 C                                                                      *
-C  COPYRIGHT (C) 1979  DONALD M. ECCLESTONE    (VAX/VMS FORTRAN)       *
+C  COPYRIGHT (C) 1979  DONALD M. ECCLESTONE                            *
 C            74 HUNT VILLAGE CRESCENT, LONDON ONTARIO CANADA  N6H 4A4  *
-C NOTE: THE ABOVE ADDRESS IS NO LONGER VALID, SORRY KIDDIES (01/01/93) *
-C=======================================================================
-C                                                                      *
-C  COPYRIGHT (C) 1993  DAN GAHLINGER - (MSDOS/486/AMD-K2-400/FORTRAN)  *
-C            INTERNET - DAN@VRX.NET --- HTTP://NEXUS.VRX.NET/TREK7     *
 C                                                                      *
 C=======================================================================
 C THE FOLLOWING PUNCHES MAY BE FOUND IN THIS DECK -                    *
@@ -57,7 +49,7 @@ C        8-5       UP-ARROW (CIRCUMFLEX)         !!!!!!!!!!!!!!!!!!!!!!!
 C        8-2       BACK-ARROW OR UNDERSCORE      _______________________
 C=======================================================================
 C                                                                      *
-C  A - MAINLRINE AND OFT-USED ROUTINES                                  *
+C  A - MAINLINE AND OFT-USED ROUTINES                                  *
 C  B - USER COMMAND ROUTINES                                           *
 C  C - M-O SHIP OPERATIONS                                             *
 C  D - SHIP INITIALIZATION                                             *
@@ -68,8 +60,6 @@ C                                                                      *
 C=======================================================================
 C                                                                      *
 C                           TREK7 MODULE A                             *
-C            -- CONVERTED TO PC BY: DAN GAHLINGER --                   *
-C ENTIRE MODULE TYPE-EXACT CHECK 04/26/2000 BY: D.G.                   *
 C                                                                      *
 C        MAINLINE AND OFT-USED ROUTINES                                *
 C                                                                      *
@@ -78,12 +68,6 @@ C        ANG       FOSTER    IXIF      LOKI      ILLDAT    OOPS        *
 C        ILLDAS                                                        *
 C                                                                      *
 C=======================================================================
-C***** MODULE NOTE: A.FOR (KLIN <- HANDWRITTEN) *****
-C TYPE-EXACT CHECK 04/26/2000 BY: D.G.
-
-CV    MAINTAINER'S ADDRESS
-      DIMENSION MADDR(7,1)
-
       INTEGER CMAND(26)
       LOGICAL ITAKA(6)
       LOGICAL GAMOVR,SULU,SAREK,SPOCK,HARPO,LARRY,CURLY
@@ -115,616 +99,262 @@ CV    MAINTAINER'S ADDRESS
       COMMON /U/LAUNCH,NUMOUT,NUME(2)
       COMMON /V/IWEB(2),IWEBZ,INVIS(4)
       COMMON /W/IDEX(2,33,20)
-      COMMON /TOM/ITOM
+        COMMON /TOM/ITOM
       EQUIVALENCE(II(1),I1),(II(2),I2)
       DATA CMAND/'IN','MA','TR','CO','PH','TO','GO','CA','EA',
      *'BO','YA','DE','HE','MI','RE','RA','CE','AT','DA','CR','SP',
      *'EN','NO','SU','HN','VE'/
       DATA NO/'N'/
+        ITOM=12345
 
-CV    MAINTAINER'S ADDRESS
-      DATA MADDR/' VAX',
-     *'ORCI',
-     *'ST A',
-     *'T GM',
-     *'AIL ',
-     *'DOT ',
-     *'COM'/
-
-CV SET DEBUGGING MODE
-      IO=0
-      ITOM=12345
-
-CV      L=5
+      L=5
 
       TYPE 9988
-9988  FORMAT(/' DONALD ECCLESTONE (C)1979 AND DAN GAHLINGER (C)1993
-     * PRESENT'//' T H E   H O L Y   T E R R O R   -
-     *   T R E K 7'///)
-      WRITE(5,100)
-100   FORMAT(' TYPE IN A RANDOM NUMBER BETWEEN 1-32767')
-      READ(5,*)ITOM
-
-C***** ABOVE WRITE WAS ORIGINALLY 1-99999 *****
-
-CV HARLIE: DATA FILE ACCESS
+9988  FORMAT(/' DONALD ECCLESTONE (C)1979 PRESENTS'//
+     *' T H E   H O L Y   T E R R O R   -   T R E K 7'///)
+      WRITE(L,*)' TYPE IN A RANDOM NUMBER BETWEEN 1-32767'
+        READ(L,*)ITOM
       CALL HARLIE
 946   IGO(1)=0
-
-CV FIZBIN: INITIAL SETTINGS
 94    CALL FIZBIN
       LAST=0
       NOSTOP=0
       IO=0
-
-CV IF NOT SAME MAP: REMOVE MINES
       IF(IGO(1).EQ.0)MINES=0
-
-CV LOOP OVER M-O SHIPS (I) FOR 1 TO 4
-890   DO 128 I=1,4
-
-CV SET FLAG "IGO" TO "0"
+390   DO 128 I=1,4
       IGO(I)=0
-
-CV IF M-O SHIP NOT IN GAME: NEXT M-O SHIP
       IF(ICHOE(I).EQ.0)GO TO 128
-
-CV M-O SHIP FORTRAN UNIT NUMBER = SHIP INDEX + 4
       L=I+4
-
+      WRITE(L,800)
 800   FORMAT(' TYPE HELP FOR HELP')
-
-C TEXT TO THIS POINT WAS HAND TYPED
-
-CV NEXT M-O SHIP
 128   CONTINUE
-
-CV ==========
-CV NEW ROUND
-CV ==========
-
-CV =======================
-CV M-O SHIPS TAKING TURNS
-CV =======================
-
-CV START WITH M-O SHIP INDEX 0
 130   IT=0
       L=4
-
-CV NEXT TURN IN ROUND
-
-CV NEXT M-O SHIP
 129   IT=IT+1
-
-CV IF BEYOND LAST (IT>4) M-O SHIP: STARBASES TAKING TURNS (23310)
       IF(IT.GT.4)GO TO 23310
-
-CV SET INITIAL VALUES
-
-CV SET NO BOARDING
       IBORD=0
-
-CV SET TERMINAL INDEX = M-O SHIP INDEX + 4
       L=IBPSC(IT)+4
-
-CV SET SHIP TYPE (JS) 1=ENTERPRISE/POTEMPKIN / 2=HAVOC/CARNAGE
       JS=(IT+1)/2
-
-CV SET OPPONENTS SIDE (IS) 1=FEDERATION / 2=KLINGONS
       IS=(IBPSC(IT)+1)/2
-
-CV SET PUSH (DEFLECT) STRENGTH = 0
       IPUSH(IT)=0
-
-CV SET PULL (YANK) STRENGTH = 0
       IPULL(IT)=0
-
-CV SET RADIO JAMMING FACTOR = 0
       STATIC(IT)=0
-
-CV SET NO VETO
       NANU=0
-
-CV IF M-O SHIP NOT IN GAME: NEXT M-O SHIP
       IF(ICHOE(IT).NE.1)GO TO 129
-
-CV M-O SHIP (INDEX IT) TAKES ITS TURN
       CALL SAURON
-
-CV GET (NEXT) COMMAND
 234   WRITE(L,10)(INAME(IQ0,IT),IQ0=1,3)
-
-CV ========================
-CV M-O SHIP COMMAND PROMPT
-CV ========================
-
-CV READ COMMAND "NA", AND TWO OPTIONAL VALUES "A" AND "B"
 10    FORMAT(/1X,3A4,' COMMAND: '$)
       A=0.0
       B=0.0
       READ(L,920,ERR=3)NA,A,B
 920   FORMAT(A2,1X,F5.0,F5.0)
-
       IGOL(1)=IBLK
       GO TO 4
-
 3     A=0.0
       B=0.0
       CALL ILLDAS(IGOL,L)
-
-CV LOOP OVER COMMANDS CMAND(I) FOR 1 TO 26
 4     DO 636 I=1,26
-
-CV GO TO LABEL ACCORDING TO COMMAND
       IF(CMAND(I).EQ.NA)GO TO (585,517,632,15,11,13,330,670,3001,
      *680,310,320,571,666,900,700,200,210,360,352,351,
      *705,350,519,690,695),I
-
-CV NEXT COMMAND
 636   CONTINUE
-
-CV NO VALID COMMAND FOUND - WRITE "TYPE HELP FOR HELP"
       WRITE(L,800)
-
-CV REPEAT COMMAND PROMPT
       GO TO 234
-
-CV ----------
-C     IN[FO]
-CV ----------
+C                                                                     IN
 585   CALL INFO
       GO TO 234
-
-CV ---------
-C     MA[P]
-CV ---------
+C                                                                     MA
 517   CALL GODOT
       GO TO 234
-
-CV --------------
-C     TR[ANSFER]
-CV --------------
+C                                                                     TR
 632   CALL SCOTT
       GO TO 234
-
-CV ------------
-C     CO[URSE]
-CV ------------
+C                                                                     CO
 15    CALL AREX
       GO TO 234
-
-CV ------------
-C     PH[ASER]
-CV ------------
+C                                                                     PH
 11    CALL MRESS
       GO TO 234
-
-CV -------------
-C     TO[RPEDO]
-CV -------------
+C                                                                     TO
 13    CALL CHEKOV
       GO TO 234
-
-CV ------------
-C     CA[NCEL]
-CV ------------
+C                                                                     CA
 670   CALL CANCEL(IBORD)
       GO TO 234
-
-CV -----------
-C     EA[GLE]
-CV -----------
+C                                                                     EA
 3001  CALL GOLLUM
       GO TO 234
-
-CV -----------
-C     BO[ARD]
-CV -----------
+C                                                                     BO
 680   CALL ORWELL(IBORD,NUMBO,IRBO,ICBO)
       GO TO 234
-
-CV ----------
-C     YA[NK]
-CV ----------
+C                                                                     YA
 310   CALL TRACLC
       GO TO 234
-
-CV -------------
-C     DE[FLECT]
-CV -------------
+C                                                                     DE
 320   CALL DEFLOC
       GO TO 234
-
-CV ----------
-C     HE[LP]
-CV ----------
+C                                                                     HE
 571   CALL INST
       GO TO 234
-
-CV ----------
-C     MI[NE]
-CV ----------
-CV IF NO TORPEDO LOCKED: WRITE MESSAGE AND NEXT COMMAND
+C                                                                     MI
 666   IF(LOCKT(IT).NE.1)GO TO 668
-
-CV STORE OLD RANGE (RANG(IT)) IN DISTP
       DISTP=RANG(IT)
-
-CV IF NO RANGE GIVEN WITH MI COMMAND: ASK FOR IT
       IF(A.EQ.0)GO TO 6660
-
-CV ELSE (IF RANGE GIVEN WITH MI COMMAND): SET RANGE TO VALUE GIVEN
-CV AND SKIP ASKING FOR IT
       RANG(IT)=A
       GO TO 6661
-
-CV ASK FOR TORPEDO-TO-MINE RANGE
 6660  WRITE(L,667)
 667   FORMAT(' ENTER RANGE AT WHICH TORPEDO IS TO BECOME A MINE - BETWEE
      *N 1.5 AND 10')
-      READ(L,24,ERR=66801)RANG(IT)
-24    FORMAT(F4.0)
-
-CV IF TORPEDO-TO-MINE RANGE OUT OF ALLOWED RANGE:
-CV ERROR MESSAGE, RESTORE OLD RANGE (DISTP), NEXT COMMAND
+      READ(L,*,ERR=66801)RANG(IT)
+24    FORMAT(F)
 6661  IF(RANG(IT).LT.1.5.OR.RANG(IT).GT.10.)GO TO 6680
-
-CV NEXT COMMAND
       GO TO 234
-
-CV WRITE FORMAL INPUT ERROR MESSAGE
 66801 CALL ILLDAT
-
-CV WRITE CONTENT ERROR MESSAGE
 6680  CALL OOPS(L)
-
-CV RESTORE OLD RANGE (DISTP)
       RANG(IT)=DISTP
-
-CV NEXT COMMAND
       GO TO 234
-
-CV WRITE NO TORPEDO LOCKED MESSAGE AND NEXT COMMAND
 668   WRITE(L,6683)
 6683  FORMAT(' PLEASE USE TORPEDO COMMAND BEFORE THIS COMMAND')
       GO TO 234
-
-CV -----------
-C     RE[SET]
-CV -----------
-900   CALL BLOCH
+C                                                                     RE
+900    CALL BLOCH
       GO TO 234
-
-CV -----------
-C     RA[DIO]
-CV -----------
+C                                                                     RA
 700   CALL UHURA
       GO TO 234
-
-CV ---------------
-C     CE[ASEFIRE]
-CV ---------------
+C                                                                     CE
 200   CALL SHADOW(1)
       GO TO 234
-
-CV ------------
-C     AT[TACK]
-CV ------------
+C                                                                     AT
 210   CALL SHADOW(0)
       GO TO 234
-
-CV ------------
-C     DA[MAGE]
-CV ------------
+C                                                                     DA
 360   I8=0
       WRITE(L,359)
 359   FORMAT(' DAMAGE FACTOR-           DECK')
-
-CV LOOP OVER DECKS (I) FOR 1 TO 33
       DO 3611 I=1,33
-
-CV SET DISPLAYED DAMAGE FACTOR (I7) TO DAMAGE FACTOR OF DECK + 1
       I7=MA(IT,I)+1
-
-CV IF I7 = 1: NO DAMAGE TO THIS DECK, NEXT DECK
       IF(I7.EQ.1)GO TO 3611
-
-CV ELSE: DAMAGE TO AT LEAST ONE DECK (I8=1)
       I8=1
-
-CV WRITE DISPLAYED DAMAGE FACTOR I7
       WRITE(L,362)I7
 362   FORMAT(I3,'-',$)
-
-CV WRITE DECK HIT
       CALL FORBIN(JS,I,L,'+')
-
-CV NEXT DECK
 3611  CONTINUE
-
-CV IF I8=0: NO DAMAGE TO SHIP
       IF(I8.EQ.0)WRITE(L,3612)
-3612  FORMAT(' NO DAMAGE TO SHIP')
-
-CV ALTERNATIVE:
-CV 3612  FORMAT(' ALL FINE DOWN HERE !!')
-
+3612  FORMAT(' ALL FINE DOWN HERE !!')
       GO TO 234
-
-CV ----------
-C     CR[EW]
-CV ----------
-
+C                                                                     CR
 352   WRITE(L,1450)
 1450  FORMAT(' CREW-')
-
-CV LOOP OVER M-O SHIPS (I) FOR 1 TO 4
       DO 1440 I=1,4
-
-CV IF M-O SHIP NOT IN GAME: NEXT M-O SHIP
       IF(ICHOE(I).NE.1)GO TO 1440
-
-CV IF CURRENT CONTROLLER OF M-O SHIP (I) = CURRENT SHIP (IT):
-CV WRITE NUMBER OF SURVIVORS OF M-O SHIP (NDEAD(I))
       IF(IBPSC(I).EQ.IBPSC(IT))WRITE(L,353)NDEAD(I),
      *(INAME(IQ0,I),IQ0=1,3)
 353   FORMAT(1X,I4,' ON ',3A4)
-
-CV NEXT M-O SHIP
 1440  CONTINUE
-
-CV =======================
-CV STARBASES TAKING TURNS
-CV =======================
-
-CV LOOP OVER STARBASES (I) FOR 1 TO 2
       DO 1451 I=1,2
-
-CV IF STARBASE NOT IN GAME: NEXT STARBASE
       IF(ICHOB(I).EQ.0)GO TO 1451
-
-CV IF STARBASE OWNER INDEX = IS CURRENT VESSEL INDEX:
-CV = CURRENT VESSEL IS OWNER OF STARBASE
-CV WRITE NUMBER OF SURVIVORS OF STARBASE NDEAB(I)
       IF(IBPSS(I).EQ.IS)WRITE(L,146)NDEAB(I),IBASE(I)
 146   FORMAT(1X,I4,' ON STARBASE',I3)
-
-CV NEXT STARBASE
 1451   CONTINUE
-
-CV =====================
-CV DOOMSDAY & C-O SHIPS
-CV =====================
-
-CV IF NO MORE CREW ON DOOMSDAY: 354
       IF(IBPOB(7).EQ.0)GO TO 354
-
-CV LOOP OVER C-O SHIPS I FOR 1 TO 8
       DO 355 I=1,8
-
-CV IF SHIP IS DOOMSDAY OR NOT IN GAME: NEXT C-O SHIP (355)
       IF(I.EQ.7.OR.ICHOS(I).EQ.0)GO TO 355
-
-CV IF NO MORE CREW ON C-O SHIP STARBASE: NEXT C-O SHIP (355)
       IF(IBPOB(I).EQ.0)GO TO 355
-
-CV IF BOARDER OF C-O SHIP I <> CURRENT VESSEL (IS): NEXT C-O SHIP (355)
       IF(IBPSB(I).NE.IS)GO TO 355
-
-CV ELSE: WRITE NUMBER OF CREW ON BOARDED VESSEL
       WRITE(L,356)IBPOB(I),(IENM2(N,I),N=1,4)
 356   FORMAT(1X,I4,' ON ',4A4)
-
-CV NEXT C-O SHIP
 355   CONTINUE
-
-CV =======
-CV EAGLES
-CV =======
-
-CV IF NO(MORE) EAGLES OUT: 234
 354   IF(NUME(IS).EQ.0)GO TO 234
-
-CV LOOP OVER EAGLES I FOR 1 TO LAUNCH
       DO 357 I=1,LAUNCH
-
-CV IF NO MORE CREW ON EAGLE: NEXT EAGLE (357)
       IF(IBPOE(I).EQ.0)GO TO 357
-
-CV IF EAGLE IS DESTRUCTED: NEXT EAGLE (357)
       IF(IGLER(I).EQ.0)GO TO 357
-
-CV IF BOARDER OF EAGLE I <> CURRENT VESSEL (IS): NEXT EAGLE (357)
       IF(IBPSE(I).NE.IS)GO TO 357
-
-CV ELSE: WRITE NUMBER OF CREW ON BOARDED EAGLE
       WRITE(L,358)IBPOE(I),I
 358   FORMAT(1X,I4,' ON EAGLE ',I2)
-
-CV NEXT EAGLE
 357   CONTINUE
       GO TO 234
-
-CV -----------
-C     SP[OCK]
-CV -----------
+C                                                                     SP
 351   CALL VULCAN
       GO TO 234
-
-CV -----------
-C     EN[EMY]
-CV -----------
+C                                                                     EN
 705   CALL ECCLE(NANU)
       GO TO 234
-
-CV ------------
-C     NO[STOP]
-CV ------------
+C                                                                     NO
 350   NOSTOP=1
       GO TO 234
-
-CV ---------------
-C     SU[RRENDER]
-CV ---------------
+C                                                                     SU
 519   IF(IJ(3-IS).EQ.0)GO TO 5190
-
-CV LOOP OVER ALL M-O SHIPS
       DO 170 I=1,4
-
-CV IF M-O SHIP NOT IN GAME: NEXT M-O SHIP
       IF(ICHOE(I).EQ.0)GO TO 170
-
-CV CALCULATE FORTRAN UNIT NUMBER OF (LOOP CURRENT) MO-SHIP
       I7=I+4
-
-CV WRITE SURRENDER WISH MESSAGE TO ALL OTHER M-O SHIPS
       WRITE(I7,171)(INAME(IQ0,IT),IQ0=1,3)
 171   FORMAT(' THE ',3A4,' WISHES TO SURRENDER')
-
-CV NEXT M-O SHIP
 170   CONTINUE
-
-CV SET SURRENDER FLAG
       ISURR(IT)=1
-
-CV WRITE MESSAGE "PRESENT YOUR SURRENDER ..." TO SURRENDERING SHIP
       WRITE(L,133)
-133   FORMAT(' PRESENT YOUR SURRENDER TO THE NEAREST ENEMY VESSEL')
-
-CV NEXT COMMAND
+133   FORMAT(' PRESENT YOUR SURRENDER TO THE NEAREST ENEMY VESSEL
+     *')
       GO TO 234
-
-CV WRITE MESSAGE "... RAISING THE WHITE FLAG"
 5190  WRITE(L,910)(INAME(IQ0,IT),IQ0=1,3)
 910   FORMAT(/' THE STARSHIP ',3A4,' IS NOW RAISING THE WHITE FLAG')
-
-CV WRITE DEMOTION MESSAGE
       WRITE(L,91)IBASE((IBPSC(IT)+1)/2),(INAME(IQ0,IT),IQ0=1,3)
-91    FORMAT(/' STARBASE',I3,' CALLING THE ',3A4,/' DUE TO YOUR COWAR
-     *DLY SURRENDER, WE HAVE LOST FACE.'/' FOR THIS ACT YOU ARE DEMOTED
-     * TO CESSPOOL CLEANER 4TH CLASS.')
-
-CV DELETE SURRENDERING M-O SHIP FROM MAP
+91    FORMAT(/' STARBASE',I3,' CALLING THE ',3A4,/' DUE TO YOUR COWARDL
+     *Y SURRENDER, WE HAVE LOST FACE.'/' FOR THIS ACT YOU ARE DEMOTED TO
+     * CESSPOOL CLEANER 4TH CLASS.')
       MAP(IENTR(IT),IENTC(IT))=IBLK
-
-CV IF MO-SHIP WAS IN AN ION STORM: PLACE ION STORM MARK IN PLACE OF SHIP
       IF(ISPOT(IT).EQ.1)MAP(IENTR(IT),IENTC(IT))=III
-
-CV DELETE SHIP FROM LIST OF SHIPS IN GAME
       ICHOE(IT)=0
-
-CV ???
       IJ(IS)=IJ(IS)-1
       II(IS)=II(IS)-1
-
-CV SET FORTRAN UNIT OF LAST PLAYER TO L
       LAST=L
-
-CV IF ???: ASK PLAYER "ANOTHER GAME ?"
       IF(I1+I2.EQ.0)GO TO 98
-
-CV NEXT M-O SHIP INDEX (IT)
       GO TO 129
-
-CV ==========
-CV GAME OVER
-CV ==========
-
-CV WRITE QUESTION "ANOTHER GAME ?", READ ANSWER INTO NA
 98    WRITE(LAST,300)
 300   FORMAT(' ANOTHER GAME ?')
       READ(LAST,92)NA
 92    FORMAT(A1)
-
       L=LAST
       IF(NO.NE.NA)GO TO 940
-
-CV OLD TRAILER
-
-CV90    FORMAT(//' ',15('-'),'  KEEP ON TREKKIN''   ',15('-'),//' IF ANY E
-CV     *RRORS ARE DETECTED, PLEASE SEND ME A COPY OF THE'/' ERRONEOUS PART
-CV     * OF THE GAME. ALSO, IF YOU HAVE ANY COMMENTS, '/' COMPLAINTS, COMP
-CV     *LIMENTS, QUESTIONS OR SUGGESTIONS ABOUT THE'/' PROGRAM, I AM ANXIO
-CV     *S TO HEAR THEM.'/////', CONTACT-'//'   DONALD ECCLESTONE,'/,5X,
-CV     *'C/O DAN GAHLINGER VIA,'/' DAN@VRX.NET -',5X)
-CV      STOP
-
-CV NEW TRAILER
-
-      WRITE(LAST,90)(MADDR(I,1),I=1,7)
-90    FORMAT(//' ',15('-'),'  KEEP ON TREKKIN''   ',15('-'),//' IF ANY E
-     *RRORS ARE DETECTED, PLEASE SEND ME A COPY OF THE'/' ERRONEOUS PART
-     * OF THE GAME. ALSO, IF YOU HAVE ANY COMMENTS, '/' COMPLAINTS, COMP
-     *LIMENTS, QUESTIONS OR SUGGESTIONS ABOUT THE'/' PROGRAM, I AM ANXIO
-     *S TO HEAR THEM.'//', CONTACT-'//,7A4,' (MAINTAINER)'/' ON BEHALF O
-     *F DONALD ECCLESTONE & DAN GAHLINGER'/)
+      WRITE(LAST,90)
+90    FORMAT('1',15('-'),'  KEEP ON TREKKIN`')
       STOP
-
-CV =============
-CV GAME RESTART
-CV =============
-
 940   IF(MINES.GT.5)GO TO 946
       DO 945 I=1,4
       IF(IENTR(I).EQ.0)GO TO 945
       MAP(IENTR(I),IENTC(I))=IBLK
       IF(ISPOT(I).EQ.1)MAP(IENTR(I),IENTC(I))=III
 945   CONTINUE
-
       DO 942 I=1,8
       IF(ICHOS(I).EQ.0)GO TO 942
       MAP(IKLNR(I),IKLNC(I))=IBLK
       IF(ISPOK(I).EQ.1)MAP(IKLNR(I),IKLNC(I))=III
 942   CONTINUE
-
       IF(NUMOUT.EQ.0)GO TO 944
-
       DO 943 I=1,25
       IF(IGLER(I).NE.0)MAP(IGLER(I),IGLEC(I))=IBLK
 943   CONTINUE
-
 944   IGO(1)=1
       WRITE(LAST,941)
 941   FORMAT(' SAME MAP?')
       READ(LAST,92)NA
-
       IF(NA.EQ.NO)IGO(1)=0
       GO TO 94
-
-CV -----------
-C     HN[???]
-CV -----------
+C                                                                     HN
 690   CONTINUE
       GO TO 234
-
-CV --------------
-C     VE[ERSION]
-CV --------------
+C                                                                     VE
 695   CONTINUE
       WRITE(L,696)
-CV 696   FORMAT(' 0.9A VAX/VMS PORT; BASED ON 7.0 DEVELOPMENTAL')
-696   FORMAT(' 1.0 VAX/VMS PORT; BASED ON 7.0 DEVELOPMENTAL')
+696   FORMAT(' 7.0 DEVELOPMENTAL')
       GO TO 234
-
-CV ------
-C     GO
-CV ------
-
-CV GO STRING EVALUATION
-
-CV IF GO STRING IS NOT EMPTY (1ST CHAR .NE. " " (BLANK): SKIP PROMPTING
+C                                                                     GO
 330   IF(IGOL(1).NE.IBLK)GO TO 331
-
-CV GO STRING PROMPTING
 3380  WRITE(L,332)
 332   FORMAT(' ENTER COMMAND STRING (M,P,T,B,Y,D,C,H FOR HELP)')
       READ(L,333)IGOL
 333   FORMAT(80A1)
-
-CV IF 1ST CHAR OF GO STRING IS NOT "H": SKIP HELP
 331   IF(IGOL(1).NE.'H')GO TO 334
-
-CV GO STRING HELP OUTPUT
       WRITE(L,335)
 335   FORMAT(' ENTER A STRING OF CHARACTERS INDICATING THE SEQUENCE IN W
      *HICH'/' YOU WISH TO EXECUTE AN ACTION - TYPE'/' ''M'' TO MOVE'/' '
@@ -737,226 +367,107 @@ CV GO STRING HELP OUTPUT
      *RACTERS-'/' COMMANDS SUCH AS ''M'' OR ''PT'' OR ''BY'' ARE POSSIBL
      *E.')
       WRITE(L,336)
-336   FORMAT(' IF THE FIRST CHARACTER IN THE STRING IS A ''C'','/'  THE
-     *GO COMMAND IS CANCELLED')
+336   FORMAT(' IF THE FIRST CHARACTER IN THE STRING IS A ''C'','/' THE
+     * GO COMMAND IS CANCELLED')
       WRITE(L,337)
 337   FORMAT(' OTHER FORMS--'/' EG. B(M)(PT) -IF THE BOARD IS SUCCESSFUL
-     *, WE MOVE ELSE WE FIRE PHASERS AND TORPEDOES. '/' THUS THE BACKUS-N
-     *AUR FORM OF THE GO-LINE IS-'/' <GO-LINE>::=<GO-CHAR>  / <GO-CHAR>(<
-     *GO-LINE>)(<GO-LINE>) / <GO-CHAR>(<GO-LINE>) / NIL'/'<GO-CHAR>::=M
+     *, WE MOVE ELSE WE FIRE PHASERS AND TORPEDOES.'/' THUS THE BACKUS-N
+     *AUR FORM OF THE GO-LINE IS-'/' <GO-LINE>::=<GO-CHAR> / <GO-CHAR>(<
+     *GO-LINE>)(<GO-LINE>) / <GO-CHAR>(<GO-LINE>) / NIL'/' <GO-CHAR>::=M
      */P/T/B/Y/D'/' CAUTION -THE GO-LINE SHOULD BE 80 CHARACTERS OR LESS
      * IN LENGTH AND SHOULD NOT NEST MORE THAN 6 LEVELS.')
-
-CV END OF GO STRING HELP; GO BACK TO GO STRING PROMPT
       GO TO 3380
-
-CV IF 1ST CHAR OF GO STRING = "C": CANCEL GO STRING
 334   IF(IGOL(1).EQ.'C')GO TO 234
-
-CV RESET ALL ??? VALUES
-
       LNA=0
-
       MOVE=0
-
-CV SET MOVEBILTY OF M-O SHIP TO FULL (2)
       IGO(IT)=2
-
       LVL=1
-
       ITAKA(1)=.FALSE.
-
-CV IF CURRENT M-O SHIP IS NOT ENTERPRISE: NEXT M-O SHIP
 338   IF(ICHOE(IT).NE.1)GO TO 129
-
-CV LOOP OVER GO LINE CHARS
-
-CV INCREMENT GO LINE CHAR INDEX
 339   LNA=LNA+1
       ISTAT=0
-
-CV IF NOT END OF GO LINE: FETCH NEXT CHAR
       IF(LNA.LE.80)GO TO 340
-
-CV IF NOT ENOUGH WARP POWER (< 0.5): NEXT M-O SHIP
 343   IF(TWARP(IT).LT.0.5)GO TO 129
-
-CV IF SHIP UNMOVABLE: NEXT M-O SHIP
       IF(NOMOV(IT).EQ.1)GO TO 129
-
-CV IF BOTH NACELLES DESTROYED (MA=9): NEXT M-O SHIP
       IF(MA(IT,29).EQ.9.AND.MA(IT,30).EQ.9)GO TO 129
-
-CV ENGINE TEMPERATURE MANAGEMENT & POTENTIAL NACELLE EXPLOSION (ENTEMP)
       CALL ENTEMP(MOVE)
       IF(GAMOVR(LAST))GO TO 98
-
-CV NEXT M-O SHIP
       GO TO 129
-
-CV IGNORE BLANK - FETCH NEXT GO CHAR
 340   IF(IGOL(LNA).EQ.IBLK)GO TO 339
-
       IF(IGOL(LNA).NE.'(')GO TO 341
       IF(ITAKA(LVL))GO TO 342
       CALL FOSTER(LNA)
       ITAKA(LVL)=.TRUE.
-
-CV NEXT GO STRING CHARACTER
       GO TO 339
-
 342   LVL=LVL+1
       IF(LVL.GT.6)GO TO 343
       ITAKA(LVL)=.FALSE.
-
-CV NEXT GO STRING CHARACTER
       GO TO 339
-
 341   IF(IGOL(LNA).NE.')')GO TO 344
       LVL=LVL-1
       IF(LVL.LE.0)GO TO 343
       ITAKA(LVL)=.FALSE.
-
-CV NEXT GO STRING CHARACTER
       GO TO 339
-
 344   ITAKA(LVL)=.FALSE.
-
-CV IF GO COMMAND <> M: SKIP MOVE
       IF(IGOL(LNA).NE.'M')GO TO 345
-
-CV IF GO COMMAND = M: MOVE
       IF(NOMOV(IT).EQ.0)GO TO 346
       WRITE(L,3470)
 3470  FORMAT(' MOVEMENT IMPOSSIBLE UNTIL ENGINES RE-ENERGIZED')
-
-CV NEXT GO STRING CHARACTER
       GO TO 339
-
 346   MOVE=MOVE+1
       IF(MOVE.GT.1)GO TO 343
-
-CV DO MOVEMENT
       ITAKA(LVL)=SULU(J)
       GO TO 347
-
-CV IF GO COMMAND <> P: SKIP PHASER
 345   IF(IGOL(LNA).NE.'P')GO TO 348
-
-CV IF GO COMMAND = P: PHASER
       IF(LOCK(IT).EQ.1)ITAKA(LVL)=SAREK(J)
+      DO 5 IAXA=1,2
+      ITAKA(LVL)=SAREK(J)
+5     CONTINUE
       GO TO 347
-
-CV IF GO COMMAND <> T: SKIP TORPEDO
 348   IF(IGOL(LNA).NE.'T')GO TO 349
-
-CV IF GO COMMAND = T: TORPEDO
-      IF(LOCKT(IT).EQ.1)ITAKA(LVL)=SPOCK(J)
+      IF(LOCKT(IT).EQ.1)GOTO 347
+      DO 6 IXAX=1,4
+      ITAKA(LVL)=SPOCK(J)
+6     CONTINUE
       GO TO 347
-
-CV IF GO COMMAND <> B: SKIP BOARD
 349   IF(IGOL(LNA).NE.'B')GO TO 365
-
-CV IF GO COMMAND = B: BOARD
-      IF(IBORD.EQ.1)ITAKA(LVL)=HARPO(IBORD,NUMBO,IRBO,ICBO)
+      IF(LOCK(IT).NE.1)GOTO 347
+      DO 7 IXAA=1,2
+      ITAKA(LVL)=HARPO(IBORD,NUMBO,IRBO,ICBO)
+7     CONTINUE
       GO TO 347
-
-CV IF GO COMMAND <> Y: SKIP YANK
 365   IF(IGOL(LNA).NE.'Y')GO TO 366
-
-CV IF GO COMMAND = Y: YANK
       IF(IPULL(IT).EQ.1)ITAKA(LVL)=LARRY(J)
       GO TO 347
-
-CV IF GO COMMAND <> D: SKIP DEFLECTOR
 366   IF(IGOL(LNA).NE.'D')GO TO 343
-
-CV IF GO COMMAND = D: DEFLECTOR
       IF(IPUSH(IT).EQ.1)ITAKA(LVL)=CURLY(J)
-
-CV IF GAME OVER: GAME OVER (98)
 347   IF(GAMOVR(LAST))GO TO 98
-
-CV NEXT GO STRING CHARACTER
       GO TO 339
-
-CV =======================
-CV STARBASES TAKING TURNS
-CV =======================
-
-CV LOOP OVER ALL STARBASES (I)
 23310 DO 23312 I=1,2
-
-CV IF STARBASE NOT IN GAME: NEXT STARBASE
       IF(ICHOB(I).NE.1)GO TO 23312
-
-CV IF NO SURVIVORS ON STARBASE: SKIP STARBASE ACTIONS
       IF(NDEAB(I).LE.0)GO TO 23313
-
-CV IF STARBASE "CEASE FIRE FLAG" SET: SKIP STARBASE ACTIONS UPON OTHERS
       IF(IFIB(I).EQ.1)GO TO 23313
-
-CV IF STARBASE DEFLECTOR STRENGTH <= 25:
-CV SKIP STARBASE ACTIONS UPON OTHERS
       IF(DFLCB(I).LE.25.)GO TO 23313
-
-CV STARBASE ACTIONS UPON OTHERS
       CALL BALOK
-
-CV IF ION STORM:
-CV CALCULATION & ANNOUNCEMENT OF ION STORM DAMAGE TO STARBASE
 23313 IF(IONB(I).NE.0)CALL TALOS
-
-CV IF STARBASE WAS NOT HIT:
-CV INCREASE STARBASE DEFLECTOR STRENGHTH BY 10
       IF(IGOB(I).EQ.0)DFLCB(I)=DFLCB(I)+10.
-
-CV LIMIT STARBASE DEFLECTOR STRENGHTH TO MAX 300
       IF(DFLCB(I).GT.300.)DFLCB(I)=300.
-
-CV RESET "STARBASE WAS HIT" FLAG TO "NOT HIT"
       IGOB(I)=0
-
-CV NEXT STARBASE
 23312 CONTINUE
-
-CV TEST FOR GAME OVER
       IF(GAMOVR(LAST))GO TO 98
-
-CV ===============================
-CV C-O SHIPS TAKING TURNS (ATACK)
-CV ===============================
-
-CV ATTACK
-      CALL ATACK
+23311 CALL ATACK
       IF(GAMOVR(LAST))GO TO 98
       CALL ENEMY
-
-CV =========================================
-CV POTENTIAL ION STORM DAMAGES TO M-O SHIPS
-CV =========================================
-
-CV LOOP OVER M-O SHIPS MI FOR 1 TO 4
       DO 301 MI=1,4
-
-CV IF M-O SHIP HIT BY ION STORM OR IN ION STORM:
-CV FINNEY(M-O SHIP INDEX)
       IF(ION(MI).NE.0.OR.ISPOT(MI).NE.0)CALL FINNEY(MI)
-
-CV NEXT M-O SHIP
 301   CONTINUE
-
       IF(GAMOVR(LAST))GO TO 98
-
-CV NEW ROUND
       GO TO 130
       END
 
 
-C  DONALD ECCLESTONE SUBPROGRAM FOR T R E K 7 --
-C            -- CONVERTED TO PC BY: DAN GAHLINGER --
+C          -- DONALD ECCLESTONE SUBPROGRAM FOR  T R E K 7 --
 C
-C TYPE-EXACT CHECK 04/26/2000 BY: D.G.
 C
       BLOCK DATA
       COMMON /M/MAP(60,60),IBLK,IENM1(8),IEE(4),IGLE,IM(4),III,ISTAR
@@ -976,14 +487,10 @@ C
       END
 
 
-C - DONALD ECCLESTONE SUBPROGRAM FOR T R E K 7 --
-C            -- CONVERTED TO PC BY: DAN GAHLINGER --
-C   TYPE-EXACT CHECK 04/26/2000 BY: D.G.
+C          -- DONALD ECCLESTONE SUBPROGRAM FOR  T R E K 7 --
 C
-C - GAMOVR
+C                              - GAMOVR -
 C
-
-CV INCIDENTS THAT MAY PUT AN END TO THE GAME
       LOGICAL FUNCTION GAMOVR(LAST)
       COMMON /A/IT,IS,II(2),IJ(2),I3,JS,ISHAK,NOSTOP
       COMMON /B/NDEAB(2),IPHOB(2),IONB(2),IGOB(2),IFIB(2)
@@ -992,200 +499,92 @@ CV INCIDENTS THAT MAY PUT AN END TO THE GAME
       COMMON /D/DFLCT(4),DFLCK(8),DFLCB(2)
       COMMON /E/PHASR(4),TWARP(4),IPHOT(4),NDEAD(4),ISURR(4)
       COMMON /I/IONK(8),ISPOK(8),ION(4),ISPOT(4)
+      COMMON /K/KILLZ
       COMMON /N/INAME(3,4),IENM2(4,8),ISIDE(3,2),IBASE(2)
+      COMMON /Q/INDUZ,IXRYZ,IMAGZ,IMAGRZ,IABSZ,ISTAZ,IRUNZ,ICLOZ,
+     *IONNO,IPLANZ,IDEVZ,IDRIZ,IMAXZ
       COMMON /R/IBPSC(4),IBPSB(8),IBPSS(2),IBPSE(25)
       COMMON /T/ICHOE(4),ICHOS(8),ICHOB(2)
+      COMMON /V/IWEBZ
       GAMOVR=.FALSE.
-
-CV ==============================
-CV POSSIBLE C-O SHIP DESTRUCTION
-CV ==============================
-
-CV LOOP OVER C-O SHIPS IN RANGE 1 TO 8
 546   DO 762 I=1,8
-
-CV RESET "C-O SHIP HIT BY ION STORM" FLAG
       IONK(I)=0
-
-CV IF C-O SHIP IN GAME AND C-O SHIP DEFLECTOR STRENGTH < 0:
-CV DESTROY C-O SHIP
       IF(ICHOS(I).NE.0.AND.DFLCK(I).LT.0)CALL HADES
-
-CV NEXT C-O SHIP
 762   CONTINUE
-
-CV ==============================
-CV POSSIBLE STARBASE DESTRUCTION
-CV ==============================
-
-CV LOOP OVER STARBASES IN RANGE 1 TO 2
       DO 154 I=1,2
-
-CV IF STARBASE NOT IN GAME: NEXT STARBASE
       IF(ICHOB(I).EQ.0)GO TO 154
-
-CV SET J TO STARBASE OWNER M-O SHIP INDEX (1 TO 4)
       J=IBPSS(I)
-
-CV IF STARBASE DEFLECTOR STRENGTH > 0: SKIP STARBASE DESTRUCTION
       IF(DFLCB(I).GE.0)GO TO 155
-
-CV ELSE: STARBASE DESTRUCTION
       CALL EREBUS
-
-CV SKIP LIFE FORMS DETECTION
       GO TO 1540
-
-CV IF NUMBER OF STARBASE CREW > 0: NEXT STARBASE
 155   IF(NDEAB(I).GT.0)GO TO 154
-
-CV IF OPPONENT PARTY OF STARBASE IS KLINGON: NEXT STARBASE
       IF(ICHOB(I).EQ.2)GO TO 154
-
-CV ELSE: WRITE TO M-O SHIPS
-CV "SENSORS DETECT NO LIFE FORMS ABOARD <NUMBER> STARBASE"
       CALL CHARON
-
-CV DECREMENT NUMBER OF STARBASES OF M-O SHIP J
 1540  II(J)=II(J)-1
-
-CV NEXT STARBASE
 154   CONTINUE
-
-CV ==============================
-CV POSSIBLE M-O SHIP DESTRUCTION
-CV ==============================
-
-CV LOOP OVER M-O SHIPS IN RANGE 1 TO 4
       DO 134 I=1,4
-
-CV IF M-O SHIP NOT IN GAME: NEXT M-O SHIP
       IF(ICHOE(I).EQ.0.OR.ICHOE(I).EQ.3)GO TO 134
-
-CV IF M-O SHIP DEFLECTOR STRENGHTH >=0: SKIP M-O SHIP DESTRUCTION
       IF(DFLCT(I).GE.0)GO TO 2320
-
-CV ELSE: M-O SHIP DESTRUCTION
       CALL STYX
-
-CV IF OLD STATUS OF M-O SHIP I7 TO BE DESTROYED (SEE ROUTINE STYX)
-CV WAS "2" (NO MORE CREW):
-CV SKIP MESSAGE "NO ONE LEFT TO CONTROL THE SHIP"
-CV AND SKIP UPDATING PARTY COUNTERS IJ AND II
       IF(I7.EQ.2)GO TO 1341
-
-CV SKIP MESSAGE "NO ONE LEFT TO CONTROL THE SHIP"
       GO TO 1340
-
-CV IF OPPONENT PARTY OF M-O SHIP IS KLINGON: NEXT M-O SHIP
 2320  IF(ICHOE(I).EQ.2)GO TO 134
-
-CV ELSE: IF NUMBER OF M-O SHIP CREW > 0: NEXT M-O SHIP
       IF(NDEAD(I).GT.0)GO TO 134
-
-CV ELSE: WRITE MESSAGE "NO ONE LEFT TO CONTROL THE SHIP"
       CALL BELIAL
-
-CV SET J TO OWNER PARTY OF M-O SHIP
 1340  J=(IBPSC(I)+1)/2
-
-CV DECREMENT IJ(OWNER PARTY)
       IJ(J)=IJ(J)-1
-
-CV DECREMENT II(OWNER PARTY)
       II(J)=II(J)-1
-
-CV SET "LAST" TO VESSEL INDEX OF M-O SHIP ???
 1341  LAST=IBPSC(I)+4
-
-CV NEXT M-O SHIP
 134   CONTINUE
-
-CV ======================
-CV CALCULATE GAME STATUS
-CV ======================
-
-CV IF ...: SET GAMOVR=.TRUE.
       IF(IJ(1)+IJ(2).EQ.0)GO TO 98
-
-CV IF SHAKEDOWN CRUISE: 100
       IF(ISHAK.EQ.1)GO TO 100
-
-CV IF II(FEDERATION) <> 0 AND II(KLINGON) + STARBASE NUMBER (I3) = 0:
-CV DECLARE WINNER PARTY
       IF(II(1).NE.0.AND.II(2)+I3.EQ.0)GO TO 139
-
-CV IF II(KLINGON) <> 0 AND II(FEDERATION) + STARBASE NUMBER (I3) = 0:
-CV DECLARE WINNER PARTY
       IF(II(2).NE.0.AND.II(1)+I3.EQ.0)GO TO 139
-
-CV ELSE: RETURN
       GO TO 100
-
-CV =====================
-CV DECLARE WINNER PARTY
-CV =====================
-
-CV IF SHAKEDOWN: SET NUMBER OF PARTICIPANTS TO "0", RETURN (100)
 139   IF(NOSTOP.EQ.2)GO TO 100
-
-CV LOOP OVER M-O SHIPS IN RANGE 1 TO 4
       DO 1400 I=1,4
-
-CV IF M-O SHIP NOT IN GAME: NEXT M-O SHIP
       IF(ICHOE(I).NE.1)GO TO 1400
-
-CV CALCULATE M-O SHIP FORTRAN UNIT NUMBER
       J=I+4
-
-CV CALCULATE OPPONENT PARTY JTK
       JTK=(IBPSC(I)+1)/2
-
-CV WRITE MESSAGE "OUR SIDE HAS DEFEATED THE ENEMY"
       WRITE(J,767)(ISIDE(IQ0,JTK),IQ0=1,3),IBASE(JTK),
      *(INAME(IQ0,I),IQ0=1,3)
-767   FORMAT(1X,3A4,' STARBASE',I3,' CALLING THE ',3A4,/'
+767   FORMAT(1X,3A4,' STARBASE',I3,' CALLING THE ',3A4,/' CONGRATULATION
      *S, CAPTAIN - OUR SIDE HAS DEFEATED THE ENEMY')
-
-CV SET THE FORTRAN UNIT NUMBER OF THE LAST SURVIVOR
-CV TO THE M-O SHIP FORTRAN UNIT NUMBER
       LAST=J
-
-CV IF NOSTOP FLAG SET TO 1: WRITE MESSAGE "CONTINUING"
       IF(NOSTOP.EQ.1)WRITE(J,7650)
-7650  FORMAT(' CONTINUING ..........')
-
-CV NEXT M-O SHIP
+7650  FORMAT(' CONTINUING ........')
 1400  CONTINUE
-
-CV IF NOSTOP FLAG SET TO 0: SET GAMOVR=.TRUE.
       IF(NOSTOP.EQ.0)GO TO 98
-
-CV ELSE: SET NOSTOP FLAG TO 2
       NOSTOP=2
-
-CV RETURN
+      READ(L,935)AXA
+935   FORMAT(A1)
+      IF(AXA.NE.'Z')GOTO 100
+      IPLANZ=1
+      IRUNZ=30
+      IDEVZ=180
+      IDRIZ=1
+      IMAXZ=12
+      IONNO=1
+      INDUZ=5000
+      IXRYZ=5000
+      IWEBZ=16
+      IMAGZ=15
+      IMAGRZ=50
+      ICLOZ=1
+      IABSZ=60
+      ISTAZ=5000
+      KILLZ=100
       GO TO 100
-
-
 98    GAMOVR=.TRUE.
-
-CV SET NUMBER OF PARTICIPANTS TO "0"
 100   ISTAT=0
       RETURN
       END
 
-C  --DONALD ECCLESTONE SUBPROGRAM FOR T R E K 7 --
-C            -- CONVERTED TO PC BY: DAN GAHLINGER --
-C  TYPE-EXACT CHECK 04/26/2000 BY: D.G.
-C
-C - RANDO -
-C
-CV IX = RETURNED RANDOM VALUE
-CV IY = LOWER LIMIT (INCLUSIVE)
-CV IZ = UPPER LIMIT (INCLUSIVE)
-CV ITOM = SEED
 
+C          -- DONALD ECCLESTONE SUBPROGRAM FOR  T R E K 7 --
+C
+C                             - RANDO -
+C
       SUBROUTINE RANDO(I,J,K)
         COMMON /TOM/ITOM
         INTEGER*2 ISHRT,ISHIT
@@ -1200,93 +599,15 @@ C this is a kludge to make the VMS random num. gen. to work.
       RETURN
       END
 
-C       -- DONALD ECCLESTONE SUBPROGRAM FOR     T R E K 7 --
-C            -- CONVERTED TO PC BY: DAN GAHLINGER --
-C  TYPE-EXACT CHECK 04/26/2000 BY: D.G.
+
+C          -- DONALD ECCLESTONE SUBPROGRAM FOR  T R E K 7 --
 C
-C                       - HORTA -
+C                                - HORTA -
 C
-CV OLD WAS:
-CV ??? GO COMMAND M SUBCOMMAND ???
-CV
-CV NEW MIGHT BE:
-CV WHAT IS THE NEAREST VESSEL, WHICH WAY TO GO?
-CV OR WHAT HAPPENS IF I GO THERE?
-CV
-CV CALLED BY:
-CV - C/SULU (2*)
-CV - C/LAUREL
-CV - C/SPOCK (2*)
-CV - C/MOE (2*)
-CV - E/ATACK (2*)
-CV - E/ALPHA (2*)
-CV
-CV ==========================
-CV INPUT TRANSFER PARAMETERS
-CV ==========================
-CV ISTR   - CURR ROW
-CV ISTC   - CURR COL
-CV ITAR   - TARGET ROW
-CV ITAC   - TARGET COL
-CV RAD    - RANGE, MAX DISTANCE HORTA WILL CALCULATE BEFORE RETURNING
-CV          (WITH MIN=21)
-CV BERNG  - BEARING ANGLE (IN DEGREES)
-CV IL     -
-CV AJUST  -
-CV IGNORE - IGNORE ION STORM FLAG?
-CV DIST   - DISTANCE
-CV KPLOT  - (TORPEDO) TRAVEL WAY (UP TO 10 POSITIONS)
-CV N      - ???
-CV MIN    - HORTA RESULT FLAG
-CV           1 = E (ENTERPRISE)
-CV           2 = P (POTEMPKIN)
-CV           3 = H (HAVOC)
-CV           4 = C (CARNAGE)
-CV           5 = K (KLINGON STARBASE)
-CV           6 = R (ROMULAN WARSHIP)
-CV           7 = T (THOLIAN WARSHIP)
-CV           8 = G (GORN WARSHIP)
-CV           9 = O (ORION PRIVATEER)
-CV          10 = Z (KZINTI WARSHIP)
-CV          11 = D (DOOMSDAY MACHINE)
-CV          12 = A (MOONBASE ALPHA)
-CV          13 = * (STAR/STARBASE)
-CV          14 = = (EAGLE)
-CV          15 = 1 (MINE OF ENTERPRISE)
-CV          16 = 2 (MINE OF POTEMPKIN)
-CV          17 = 3 (MINE OF HAVOC)
-CV          18 = 4 (MINE OF CARNAGE)
-CV          19 = I (ION STORM)
-CV          20 = NEW POSITION IS OUT OF MAP
-CV          21 = DISTANCE TO NEAREST VESSEL > RANGE (RAD)
-CV          22 = EMPTY?
-CV
-CV ===================
-CV INTERNAL VARIABLES
-CV ===================
-CV I7     - TARGET ROW
-CV I8     - TARGET COL
-CV X      - DISTANCE BETWEEN CURRENT AND TARGET POSITION
-CV DISTP  - DISTANCE TO NEAREST VESSEL (ITERATIVELY CALCULATED)
-CV IDIST  - INTEGER OF DISTANCE (DIST)
-CV INTER  - ARRAY OF MIN CHARACTERS
-CV NA     - OBJECT AT TARGET POSITION
-CV
-CV ==================
-CV OUTPUT PARAMETERS
-CV ==================
-CV I7     - C-O MOVEMENT TARGET ROW (ATACK/IKLNR(I))
-CV I8     - C-O MOVEMENT TARGET COL (ATACK/IKLNC(I))
-CV KPLOT  -
-CV
-CV
       SUBROUTINE HORTA(ISTR,ISTC,ITAR,ITAC,RAD,BERNG,IL,AJUST,IGNORE
      *,DIST,KPLOT)
       INTEGER KPLOT(10),INTER(19)
       LOGICAL CYRANO
-CV ATTENTION: THE FOLLOWING COMMON /C/ CONTAINS THE VARIABLE NAME "AJUS"
-CV            WHICH LOOKS LIKE A TYPO, BUT THIS IS ON PURPOSE AS "AJUST"
-CV            IS ALREADY DECLARED AS SUBROUTINE PARAMETER!
       COMMON /C/L,A,B,I,NA,IV,I7,I8,N,DISTP,AJUS,MIN,ISTAT,JTK,KOENIG,
      *IGNOR,IO,IGOL(80)
       COMMON /L/IENTR(4),IENTC(4),IKLNR(8),IKLNC(8),IGLER(25),IGLEC(25),
@@ -1296,307 +617,113 @@ CV            IS ALREADY DECLARED AS SUBROUTINE PARAMETER!
      *'=','1','2','3','4','I'/
       IF(IO.EQ.1)TYPE 1970,N,ISTR,ISTC,ITAR,ITAC,RAD,BERNG,AJUST,IGNORE
 1970  FORMAT(' BEGIN HORTA N=',I5,' ISTR=',I5,' ISTC=',I5,' ITAR=',I5,
-     *' ITAC=',I5,' RAD=',F6.1,' BERNG=',F6.1,' AJUST=',F6.1,
-     *' IGNORE=',I5)
-
-CV ===================
-CV SET DEFAULT VALUES
-CV ===================
-
+     *' ITAC=',I5,' RAD=',F,' BERNG=',F,' AJUST=',F,' IGNORE=',I5)
       IDIST=0
       DISTP=0.0
-
-CV SET "C-O MOVEMENT TARGET ROW" (I7) TO INPUT TARGET ROW (ISTR)
       I7=ISTR
-
-CV SET "C-O MOVEMENT TARGET COL" (I8) TO INPUT TARGET COL (ISTC)
       I8=ISTC
-
-CV ???
       IL=1
-
-CV SET J (DELTA ROW?) TO "0"
       J=0
-
-CV SET M (DELTA COL?) TO "0"
       M=0
-
-CV ====
-CV ???
-CV ====
-
-CV IF N>2 (?): SKIP
       IF(N.GT.2)GO TO 2
-
-CV ======================
-CV CALCULATE COURSE DATA
-CV ======================
-
-CV CALCULATE X = DISTANCE BETWEEN POSITION
-CV (ISTC=CURR COLUMN, ISTR=CURR ROW)
-CV AND TARGET (ITAC=TARGET COLUMN, ITAR=TARGET ROW)
       X=DI(ITAC,ITAR,ISTC,ISTR)
-
-
-      IF(IO.EQ.1)TYPE 1999,ITAC,ITAR,ISTC,ISTR,X
-1999  FORMAT(' ITAC=',I5,' ITAR=',I5,' ISTC=',I5,' ISTR=',I5,' X=',F6.2)
-
-CV CALCULATE SINA/COSA FROM CURRENT/TARGET POSITIONS
-CV AND DISTANCE BETWEEN CURRENT AND TARGET
       SINA=FLOAT(ITAR-ISTR)/X
       COSA=FLOAT(ITAC-ISTC)/X
       GO TO 3
-
-CV CALCULATE SINA/COSA FROM BERNG AND AJUST
 2     SINA=SIN(BERNG+AJUST)
       COSA=COS(BERNG+AJUST)
-
-CV ===========
-CV BEGIN STEP
-CV ===========
-
-CV ===============================
-CV ANGLE CHECK (ASKEW/ORTHOGONAL)
-CV ===============================
-
-CV IF SINA AND COSA <> 0: 4
-CV (COURSE IS ASKEW)
 3     IF(SINA.NE.0.AND.COSA.NE.0)GO TO 4
-
-CV ELSE: EITHER SINA = 0 OR COSA = 0: INCREASE DISTP BY 1.
-CV SIN: 0/180/360 COS: 90/270
-CV =======================================================
-CV COURSE IS ORTHOGONAL (EITHER 0/90/180/270/360 DEGREES)
-CV =======================================================
-
       DISTP=DISTP+1.00
-
-CV IF SINA = 0: INCREMENT COL (M)
       IF(SINA.EQ.0)M=M+1
-
-CV IF COSA = 0: INCREMENT ROW (J)
       IF(COSA.EQ.0)J=J+1
-
       GO TO 5
-
-CV ================
-CV COURSE IS ASKEW
-CV ================
-
-CV CALCULATE DEVIATION FACTORS D1 AND D2
 4     D1=ABS(FLOAT(J+1)/SINA)
       D2=ABS(FLOAT(M+1)/COSA)
-
-CV IF DEVIATION IS VERY LOW: INCREMENT ROW AND COL (60)
       IF(ABS(D1-D2).LE.0.02)GO TO 60
-
-CV IF D1 > D2: INCREMENT ONLY COL (6)
       IF(D1.GT.D2)GO TO 6
-
-CV ELSE (D2 > D1): INCREMENT ONLY ROW
-
-CV ===================
-CV INCREMENT ONLY ROW
-CV ===================
-
       DISTP=D1
-
       J=J+1
-
       GO TO 5
-
-CV ======================
-CV INCREMENT ROW AND COL
-CV ======================
-
 60    DISTP=D1
       J=J+1
       M=M+1
       GO TO 5
-
-CV ===================
-CV INCREMENT ONLY COL
-CV ===================
-
 6     DISTP=D2
       M=M+1
-
-CV =============
-CV OUT OF RANGE
-CV =============
-
-CV IF DISTANCE TO NEAREST VESSEL > RANGE (RAD): MIN=21, RETURN
 5     IF(DISTP.GT.RAD)GO TO 7
-
-CV ====================================
-CV CALCULATE NEW TARGET POSITION I7/I8
-CV ====================================
-
-CV RESET I7 TO ...
       I7=ISTR+SIGN(FLOAT(J),SINA)
-
-CV RESET I8 TO ...
       I8=ISTC+SIGN(FLOAT(M),COSA)
-
-CV IF NEW POSITION IS OUT OF MAP: MIN=20, RETURN (8)
       IF(CYRANO(I7,I8))GO TO 8
-
-
 21    NA=MAP(I7,I8)
-
-CV IF NA <> ION STORM: 22
       IF(NA.NE.INTER(19))GO TO 22
-
-CV ELSE: ION STORM
-
-CV IF ION STORM IGNORE FLAG SET: 19
       IF(IGNORE.EQ.1)GO TO 19
-
-CV ELSE: SET MIN TO 19 (ION STORM)
       GO TO 15
-
-CV NO ION STORM
 22    IF(NA.NE.IBLK)GO TO 9
-
-CV ELSE: NA IS EMPTY
 19    IF(N.NE.3)GO TO 13
-
       IF(IFIX(DISTP).NE.IFIX(DISTP)/2*2)GO TO 3
-
       IF(IDIST.EQ.IFIX(DISTP))GO TO 3
-
       KPLOT(IL)=I8
       KPLOT(IL+1)=I7
-
-CV SET INTEGER DISTANCE "IDIST" TO INTEGER OF "DISTP"
       IDIST=IFIX(DISTP)
       IL=IL+2
-
-CV ============
-CV REPEAT STEP
-CV ============
-
       GO TO 3
-
-CV ==============
-CV CALCULATE MIN
-CV ==============
-
-CV LOOP OVER MIN FOR 1 TO 18
 9     DO 10 MIN=1,18
-
-CV IF MIN = IV: NEXT MIN
       IF(MIN.EQ.IV)GO TO 10
-
-CV IF OBJECT AT TARGET POSITION <> MIN: NEXT MIN
       IF(NA.NE.INTER(MIN))GO TO 10
-
-CV ELSE: OBJECT AT TARGET POSITION = MIN
-
-CV IF OBJECT IS NOT KZINTI: RETURN (WITH MIN = OBJECT INDEX)
       IF(MIN.NE.10)RETURN
-
-CV ================================
-CV SPECIAL VERIFICATION FOR KZINTI
-CV ================================
-
-CV ELSE: MIN IS 10
-
-CV IF TARGET COL <> KZINTI COL: NEXT MIN
       IF(I8.NE.IKLNC(6))GO TO 10
-
-CV ELSE: TARGET COL = KZINTI COL
-
-CV IF TARGET ROW = KZINTI ROW: RETURN (WITH MIN = 10)
       IF(I7.EQ.IKLNR(6))RETURN
-
-CV NEXT MIN
 10    CONTINUE
-
-CV SKIP SETTING MIN TO 20/21
       GO TO 13
-
 8     MIN=20
       RETURN
-
 7     MIN=21
       RETURN
-
-CV IF NUMBER OF PARTICIPANTS = 11 (???):
-CV PUT ION STORM IN TARGET POSITION (I7/I8)
 13    IF(ISTAT.EQ.11)MAP(I7,I8)=INTER(19)
-
       IF(N.EQ.5)GO TO 17
       IF(N.NE.1)GO TO 3
       IF(I7.NE.ITAR)GO TO 3
       IF(I8.NE.ITAC)GO TO 3
       MIN=22
       RETURN
-
-CV SET MIN TO ION STORM (19), RETURN
 15    MIN=19
       RETURN
-
-
 17    Q=DI(ITAC,ITAR,I8,I7)
       IF(Q.LT.DIST)DIST=Q
       GO TO 3
       END
 
 
-C DONALD ECCLESTONE SUBPROGRAM FOR T R E K 7 --
-C            -- CONVERTED TO PC BY: DAN GAHLINGER --
-C  TYPE-EXACT CHECK 04/26/2000 BY: D.G.
+C          -- DONALD ECCLESTONE SUBPROGRAM FOR  T R E K 7 --
 C
-C - CYRANO
+C                             - CYRANO -
 C
-CV TRUE: LOST IN SPACE => OUT OF 60X60 AREA
-
       LOGICAL FUNCTION CYRANO(IR,IC)
-
-CV SET "OUT OF AREA" TO FALSE
       CYRANO=.FALSE.
-
-CV IF ROW OR COLUMN COORDINATE <1 OR <60: "OUT OF AREA" = TRUE
       IF(IR.LT.1.OR.IR.GT.60.OR.IC.LT.1.OR.IC.GT.60)CYRANO=.TRUE.
       RETURN
       END
 
-C               -- DONALD ECCLESTONE SUBPROGRAM FOR T R E K 7 -
-C            -- CONVERTED TO PC BY: DAN GAHLINGER --
-C  TYPE-EXACT CHECK 04/26/2000 BY: D.G.
-C
-C                       - DI -
-C
-CV CALCULATE DISTANCE (FLOAT) BETWEEN TO POINTS I,J AND K,L
-      FUNCTION DI(I,J,K,L)
 
-CV USE PHYTHAGORAS TO CALCULATE DISTANCE DI
+C          -- DONALD ECCLESTONE SUBPROGRAM FOR  T R E K 7 --
+C
+C                               - DI -
+C
+      FUNCTION DI(I,J,K,L)
       DI=SQRT(FLOAT((I-K)**2+(J-L)**2))
       RETURN
       END
 
 
-C               -- DONALD ECCLESTONE SUBPROGRAM FOR T R E K 7
-C            -- CONVERTED TO PC BY: DAN GAHLINGER --
-C  TYPE-EXACT CHECK 04/26/2000 BY: D.G.
+C          -- DONALD ECCLESTONE SUBPROGRAM FOR  T R E K 7 --
 C
-C - ANG
+C                              - ANG -
 C
-CV CALCULATE ANGLE FROM ROW DIFF (IVR) AND COLUMN DIFF (IVC)
       FUNCTION ANG(IVR,IVC)
-
-CV IF COLUMN DIFF (IVC) <> 0: START ATAN CALCULATION
       IF(IVC.NE.0)GO TO 1
-
-CV IF COLUMN DIFF (IVC) = 0: ANG=90; SKIP ATAN CALCULATION
       ANG=90.
       GO TO 2
-
-CV ANGLE CALCULATION (0-90 DEGREES)
 1     ANG=ABS(ATAN(FLOAT(IVR)/FLOAT(IVC)))*180./3.14159265
-
-CV ANGLE CALCULATION (90-360 DEGREES)
 2     IF(IVC.LT.0.AND.IVR.GE.0)ANG=180.-ANG
       IF(IVC.LT.0.AND.IVR.LT.0)ANG=180.+ANG
       IF(IVC.GE.0.AND.IVR.LT.0)ANG=360.-ANG
@@ -1604,21 +731,14 @@ CV ANGLE CALCULATION (90-360 DEGREES)
       END
 
 
-C -- DONALD ECCLESTONE SUBPROGRAM FOR T R E K 7 --
-C            -- CONVERTED TO PC BY: DAN GAHLINGER --
-C   TYPE-EXACT CHECK 04/26/2000 BY: D.G.
+C          -- DONALD ECCLESTONE SUBPROGRAM FOR  T R E K 7 --
 C
-C - FOSTER
+C                             - FOSTER -
 C
-CV PROCESS BRACKETS IN GO COMMAND LINE
       SUBROUTINE FOSTER(LNA)
       COMMON /C/L,A,B,I,NA,IV,I7,I8,N,DISTP,AJUST,MIN,ISTAT,JTK,KOENIG,
      *IGNORE,IO,IGOL(80)
       I7=1
-
-CV LOOP OVER IGOL(LNA) (FROM 1 TO 80)
-
-CV INCREMENT LNA
 1     LNA=LNA+1
       IF(LNA.GT.80)GO TO 2
       IF(IGOL(LNA).EQ.'(')I7=I7+1
@@ -1628,89 +748,54 @@ CV INCREMENT LNA
       END
 
 
-C - DONALD ECCLESTONE SUBPROGRAM FOR T R E. K
-C            -- CONVERTED TO PC BY: DAN GAHLINGER --
-C   TYPE-EXACT CHECK 04/26/2000 BY: D.G.
+C          -- DONALD ECCLESTONE SUBPROGRAM FOR  T R E K 7 --
 C
-C -IXIF -
+C                              - IXIF -
 C
-CV LIMIT DAMAGE FACTOR TO RANGE 0-10
       INTEGER FUNCTION IXIF(IVV)
-
-CV RETURN VALUE = INPUT VALUE
       IXIF=IVV
-
-CV IF INPUT VALUE < 0: RETURN VALUE=0
       IF(IVV.LT.0)IXIF=0
-
-CV IF INPUT VALUE > 10: RETURN VALUE=10
       IF(IVV.GT.10)IXIF=10
       RETURN
       END
 
 
-C       -- DONALD ECCLESTONE SUBPROGRAM FOR T R E K 7
-C            -- CONVERTED TO PC BY: DAN GAHLINGER --
-C   TYPE-EXACT CHECK 04/26/2000 BY: D.G.
+C          -- DONALD ECCLESTONE SUBPROGRAM FOR  T R E K 7 --
 C
-C               - LOKI -
+C                              - LOKI -
 C
-CV WEAPON PREVIOUSLY LOCKED MESSAGE
       LOGICAL FUNCTION LOKI(IP)
       COMMON /C/L,A,B,I,NA,IV,I7,I8,N,DISTP,AJUST,MIN,ISTAT,JTK,KOENIG,
      *IGNORE,IO,IGOL(80)
-
-CV SET "WEAPON PREVIOUSLY LOCKED" FLAG=FALSE
       LOKI=.FALSE.
-
-CV IF INPUT <> 1: RETURN
       IF(IP.NE.1)RETURN
-
-CV IF INPUT = 1: SET "WEAPON PREVIOUSLY LOCKED" FLAG=TRUE
       LOKI=.TRUE.
-
-CV WRITE MESSAGE
       WRITE(L,1)
 1     FORMAT(' WEAPON PREVIOUSLY LOCKED')
       RETURN
       END
 
 
-C       -- DONALD ECCLESTONE SUBPROGRAM FOR T R E K 7 -
-C            -- CONVERTED TO PC BY: DAN GAHLINGER --
-C    TYPE-EXACT CHECK 04/26/2000 BY: D.G.
+C          -- DONALD ECCLESTONE SUBPROGRAM FOR  T R E K 7 --
 C
-C               ILLDAT -
+C                                - ILLDAT -
 C
 C WHEN FOROTS VERSION 5 DETECTS AN INPUT ERROR, IT BACKSPACES TO THE
 C BEGINNING OF THE ILLEGAL RECORD, AND A BRANCH IS MADE TO THE STATEMENT
 C SPECIFIED BY ERR IN THE READ STATEMENT. THIS ROUTINE IS CALLED TO
 C CLEAR OUT THIS RECORD SO THE NEXT READ WILL GET DATA FROM THE TTY.
-CV FOROTS = FORTRAN-10 OBJECT TIME SYSTEM (PDP-10!)
-CV NEED IS TO BE TESTED ON VAX/VMS!
       SUBROUTINE ILLDAT
       COMMON /C/L,A,B,I,NA,IV,I7,I8,N,DISTP,AJUST,MIN,ISTAT,JTK,KOENIG,
      *IGNORE,IO,IGOL(6)
-
-CV IMMEDIATE RETURN (ROUTINE NOT NEEDED FOR VAX/VMS)
-CV NOT A PURE "RETURN" AS THIS THROWS A COMPILATION WARNING
-      IF(.TRUE.)RETURN
-
       READ(L,1)
 1     FORMAT(1X)
       RETURN
       END
 
+C          -- DONALD ECCLESTONE SUBPROGRAM FOR  T R E K 7 --
 C
+C                               - OOPS -
 C
-C DONALD ECCLESTONE SUBPROGRAM FOR T R E K 7 --
-C            -- CONVERTED TO PC BY: DAN GAHLINGER --
-C     TYPE-EXACT CHECK 04/26/2000 BY: D.G.
-C
-C- OOPS -
-C
-CV ERROR MESSAGE FOR FORMAL OK., BUT AS TO CONTENT FAULTY ENTRY,
-CV EG. NUMBER OUT OF RANGE
       SUBROUTINE OOPS(L)
       WRITE(L,1)
 1     FORMAT(' ILLEGAL ENTRY - COMMAND CANCELLED')
@@ -1718,13 +803,10 @@ CV EG. NUMBER OUT OF RANGE
       END
 
 
-C -- DONALD ECCLESTONE SUBPROGRAM FOR T R E K 7 --
-C            -- CONVERTED TO PC BY: DAN GAHLINGER --
-C     TYPE-EXACT CHECK 04/26/2000 BY: D.G.
+C          -- DONALD ECCLESTONE SUBPROGRAM FOR  T R E K 7 --
 C
-C - ILLDAS
+C                                - ILLDAS -
 C
-CV RE-READ IGOL INTO 80A (WHY?) DISPENSABLE???
       SUBROUTINE ILLDAS(IGOL,L)
       DIMENSION IGOL(80)
       READ(L,1)IGOL
